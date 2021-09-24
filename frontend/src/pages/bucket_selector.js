@@ -6,7 +6,7 @@ function BucketSelector(){
             </div>
             <ul className="nav nav-pills flex-column mb-auto">
                 <li className="nav-item">
-                    <a href="#" className="nav-link active" aria-current="page">
+                    <a href="#" className="nav-link active" aria-current="page" style={{background: "#df4a16ff"}}>
                         bucket-1
                     </a>
                 </li>

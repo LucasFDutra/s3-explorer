@@ -10,8 +10,8 @@ function Header(){
                         <i className="bi bi-chevron-right"></i>
                     </button>
                 </div>
-                <div className="ms-4 border border-1 border-secondary rounded bg-secondary" style={{width: '-webkit-fill-available'}}>
-                    <h6 className="m-2 text-white">user/teste/teste/teste</h6>
+                <div className="mx-4 rounded" style={{width: '-webkit-fill-available', background: '#282c34ff'}}>
+                    <h6 className="m-2 ms-3 text-white">user/teste/teste/teste</h6>
                 </div>
             </div>
         </nav>

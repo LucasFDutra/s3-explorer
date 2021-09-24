@@ -6,3 +6,16 @@ main {
     overflow-x: auto;
     overflow-y: hidden;
 }
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.my-board-component:hover {
+    cursor: pointer;
+}
+
+.my-board-component-img {
+    width: 67px;
+}
