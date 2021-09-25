@@ -34,7 +34,7 @@ const extentions = {
     'xml': XmlIcon,
 }
 
-function FileIcon({file_name}){
+function FileIcon({file_name, file_key, download_object}){
     const file_split = file_name.split('.')
     let file_extention = file_split[file_split.length-1]
     if (file_split.length === 1){
@@ -44,9 +44,9 @@ function FileIcon({file_name}){
     file_extention = extentions[file_extention] ? extentions[file_extention] : extentions['others']
 
     return (
-        <div className="ms-2 d-flex flex-column align-items-center justify-content-center my-board-component">
-            <img src={file_extention} className="my-board-component-img"/>
-            <span className="text-white">{file_name}</span>
+        <div className="me-2 d-flex flex-column align-items-center justify-content-center my-board-component">
+            <img onDoubleClick={() => {download_object(file_name, file_key)}} src={file_extention} className="my-board-component-img" alt=''/>
+            <span className="text-white text-center" style={{width: "8rem", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}} title={file_name.length > 13 ? file_name : null}>{file_name}</span>
         </div>
     )
 }

@@ -1,18 +1,12 @@
-import Header from './pages/header'
-import BucketSelector from './pages/bucket_selector'
-import FilesBoard from './pages/files_board'
+import Main from './pages/main'
 import './App.css'
 
 function App() {
-  return (
-    <>
-      <Header/>
-      <main>
-        <BucketSelector/>
-        <FilesBoard/>
-      </main>
-    </>
-  );
+    return (
+        <div>
+            <Main />
+        </div>
+    );
 }
 
 
