@@ -20,6 +20,19 @@ main {
     width: 67px;
 }
 
+.bucket-link {
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
+}
+
+.bucket-title{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 12rem;
+}
+
 .bucket-link:hover {
     cursor: pointer;
 }
