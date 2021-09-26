@@ -2,7 +2,7 @@ import Bucket from './bucket'
 
 function BucketSelector({buckets_list, set_current_bucket, is_loading}){
     return (
-        <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style={{width: "280px"}}>
+        <div id="buckets-sidbar" className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
             <div className="d-flex align-items-center mb-3 ms-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span className="fs-4">Buckets</span>
             </div>

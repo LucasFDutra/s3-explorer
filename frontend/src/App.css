@@ -7,6 +7,12 @@ main {
     overflow-y: hidden;
 }
 
+#buckets-sidbar {
+    width: 280px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .btn:focus {
     outline: none;
     box-shadow: none;
@@ -48,7 +54,7 @@ main {
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
