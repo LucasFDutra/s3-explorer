@@ -6,7 +6,7 @@ Ser uma aplicação de visualização e download de arquivos de buckets s3 da aw
 
 # Como utilizar
 ---
-Tem duas maneiras, utilizando a [imagem](https://hub.docker.com/repository/docker/lucasfdutra/s3-explorer) já pronta no dockerHub ou então fazendo o build do projeto
+Tem duas maneiras, utilizando a [imagem](https://hub.docker.com/r/lucasfdutra/s3-explorer) já pronta no dockerHub ou então fazendo o build do projeto
 
 ## Utilizando Docker
 Crie um arquivo de configurações para o aplicativo react, que irá indicar o endereço que seu backend flask está.
