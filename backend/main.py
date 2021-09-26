@@ -1,5 +1,4 @@
 import os
-from botocore.utils import S3ControlArnParamHandler
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import boto3
