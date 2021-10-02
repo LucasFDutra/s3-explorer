@@ -1,1 +1,1 @@
-docker build -t s3-explorer .
+docker build -t lucasfdutra/s3-explorer .
