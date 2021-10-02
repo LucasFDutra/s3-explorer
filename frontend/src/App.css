@@ -97,3 +97,10 @@ main {
     color: grey;
     margin-left: 80px;
 }
+
+#search_bar{
+    height: 2.2em; 
+    width: -webkit-fill-available;
+    margin-left: -1em;
+    padding-left: 1em;
+}

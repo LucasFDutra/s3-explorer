@@ -3,7 +3,7 @@ import FolderIcon from './folder_icon'
 import FileIcon from './file_icon'
 import Spinner from './spinner'
 
-function FilesBoard({content, get_object_list, download_object, is_empty, is_loading}){
+function FilesBoard({content, get_object_list, download_object, is_empty, is_loading, is_searching}){
     useEffect(function() {
         if (document.getElementById('end_of_page')){
             const intersection_observer_end_of_page = new IntersectionObserver(function(entries){
@@ -20,7 +20,19 @@ function FilesBoard({content, get_object_list, download_object, is_empty, is_loa
         <div className="p-2 ps-4 d-flex align-content-start flex-wrap" id="files-board">
             {
                 function(){
-
+                    if (is_searching){
+                        return(
+                            <input id="search_bar" className="border-0 rounded text-white rounded bg-dark" autoFocus />
+                        )
+                    } else {
+                        return (
+                            <span/>
+                        )
+                    }
+                }()
+            }
+            {
+                function(){
                     if (is_loading){
                         return (
                             <Spinner />

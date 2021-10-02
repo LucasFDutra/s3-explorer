@@ -13,10 +13,12 @@ function Main() {
     const [current_bucket, set_current_bucket] = useState('')
     const [is_empty, set_is_empty] = useState(false)
     const [is_loading, set_is_loading] = useState(false)
+    const [is_searching, set_is_searching] = useState(false)
     const [next_continuation_token, set_next_continuation_token] = useState(false)
 
     useEffect(function(){
         get_buckets()
+        start_search_bar()
     }, [])
 
     useEffect(function() {
@@ -33,6 +35,26 @@ function Main() {
         } catch (error) {
             toast_control(error.response.data)
         }
+    }
+
+    function start_search_bar(){
+        let ctrl = false;
+        document.addEventListener("keydown", function(event){
+            if(event.key === 'Control'){
+                ctrl = true;
+            }
+            if(event.key.toLocaleLowerCase() === 'f' && ctrl == true){
+                event.preventDefault();
+                console.log('apertou control f')
+                set_is_searching((currentValue) => !currentValue)
+            }
+        }, true);
+
+        document.addEventListener("keyup", function(event){
+            if(event.key == 'Control'){
+                ctrl = false;
+            }
+        });
     }
 
     async function get_object_list(prefix, is_previus, is_loading_more){
@@ -120,6 +142,7 @@ function Main() {
                     download_object={download_object} 
                     is_empty={is_empty} 
                     is_loading={is_loading}
+                    is_searching={is_searching}
                 />
             </main>
         </>
