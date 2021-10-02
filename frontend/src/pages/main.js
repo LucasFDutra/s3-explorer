@@ -3,6 +3,7 @@ import {api} from '../utils/api'
 import Header from '../components/header'
 import BucketSelector from '../components/bucket_selector'
 import FilesBoard from '../components/files_board'
+import toast_control from '../utils/toast_control'
 
 function Main() {
     const [files_board_content, set_files_board_content] = useState([])
@@ -12,79 +13,74 @@ function Main() {
     const [current_bucket, set_current_bucket] = useState('')
     const [is_empty, set_is_empty] = useState(false)
     const [is_loading, set_is_loading] = useState(false)
+    const [next_continuation_token, set_next_continuation_token] = useState(false)
 
     useEffect(function(){
         get_buckets()
     }, [])
+
+    useEffect(function() {
+        if (!is_loading){
+            set_files_board_content([])
+            get_object_list('')
+        }
+    }, [current_bucket])
 
     async function get_buckets(){
         try {
             const response = await api.get('/get_buckets')
             set_buckets_list(response.data)
         } catch (error) {
-            if (error.response.status >= 400){
-                console.log(error.response.data)
-            } else {
-                console.log('Oops! ocorreu um erro inesperado')
-            }
+            toast_control(error.response.data)
         }
     }
 
-    useEffect(function() {
-        if (!is_loading){
-            set_files_board_content([])
-            get_objects('')
-        }
-    }, [current_bucket])
-
-    async function get_objects(prefix, is_previus){
-        if (current_bucket === ''){
+    async function get_object_list(prefix, is_previus, is_loading_more){
+        if ((current_bucket === '') || (is_previus && current_prefix === '') || (is_loading_more && !next_continuation_token)){
             return
         }
+        console.log('efetuando request')
         try {
-            set_is_loading(true)
-            let new_prefix
+            let new_prefix = current_prefix
             let new_previus
-            if (prefix === ''){
-                new_prefix = ''
-                new_previus = ''
-            } else if (is_previus){
-                new_prefix = previus_prefix
-                let split_prefix = new_prefix.split('/').slice(0, new_prefix.split('/').length-2)
-                new_previus = split_prefix.length === 0 ? '' : split_prefix.join('/')+'/'
-            } else {
-                new_prefix = `${current_prefix}${prefix}`
-                new_previus = current_prefix
-            }
-            set_current_prefix(new_prefix)
-            set_previus_prefix(new_previus)
-
-            if (is_previus && current_prefix === ''){
-                return
-            }
-
-            const config = {
-                "headers": {
-                    "x-bucket": current_bucket,
-                    "x-prefix": new_prefix
+            if (!is_loading_more){
+                set_is_loading(true)
+                if (prefix === ''){
+                    new_prefix = ''
+                    new_previus = ''
+                } else if (is_previus){
+                    new_prefix = previus_prefix
+                    let split_prefix = new_prefix.split('/').slice(0, new_prefix.split('/').length-2)
+                    new_previus = split_prefix.length === 0 ? '' : split_prefix.join('/')+'/'
+                } else {
+                    new_prefix = `${current_prefix}${prefix}`
+                    new_previus = current_prefix
                 }
+                set_current_prefix(new_prefix)
+                set_previus_prefix(new_previus)
+                set_files_board_content(() => [])
             }
-            console.log(config)
-            const response = await api.get('/get_object_list', config)
             
-            if (response.data.length === 0){
+            const headers = {
+                "x-bucket": current_bucket,
+                "x-prefix": new_prefix
+            }
+            if (is_loading_more){
+                headers['x-next-continuation-token'] = next_continuation_token
+            }
+            const config = {"headers": headers}
+            const response = await api.get('/get_object_list', config)
+            if (response.data.objects.length === 0){
+                set_files_board_content([])
+                set_next_continuation_token(false)
                 set_is_empty(true)
             } else {
                 set_is_empty(false)
+                set_next_continuation_token(response.data.next_continuation_token)
+                set_files_board_content((currentList) => [...currentList, ...response.data.objects])
             }
-            set_files_board_content(response.data)
-            set_current_prefix(new_prefix)
         } catch (error) {
-            if (error.response.status >= 400){
-                console.log(error.response.data)
-            } else {
-                console.log('Oops! ocorreu um erro inesperado')
-            }
+            toast_control(error.response.data)
         } finally {
             set_is_loading(false)
         }
@@ -106,31 +102,28 @@ function Main() {
                     "x-key-name": file_key
                 }
             }
-            console.log(header)
             const response = await api.get('/download_object', header)
-            console.log(response)
             download_file(file_name, response.data)
-            // set_download_file(response.data)
         } catch (error) {
-            if (error.response.status >= 400){
-                console.log(error.response.data)
-            } else {
-                console.log('Oops! ocorreu um erro inesperado')
-            }
+            toast_control(error.response.data)
         }
     }
 
     return (
         <>
-            <Header current_folder={current_prefix} previus_folder={previus_prefix} get_objects={get_objects}/>
+            <Header current_folder={current_prefix} previus_folder={previus_prefix} get_object_list={get_object_list}/>
             <main>
                 <BucketSelector buckets_list={buckets_list} set_current_bucket={set_current_bucket} is_loading={is_loading}/>
-                <FilesBoard content={files_board_content} get_objects={get_objects} download_object={download_object} is_empty={is_empty} is_loading={is_loading}/>
-                {/* <iframe src={download_file} style={{display: 'none'}}></iframe> */}
+                <FilesBoard 
+                    content={files_board_content} 
+                    get_object_list={get_object_list} 
+                    download_object={download_object} 
+                    is_empty={is_empty} 
+                    is_loading={is_loading}
+                />
             </main>
         </>
     );
 }
-
 
 export default Main;
