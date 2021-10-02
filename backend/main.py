@@ -5,9 +5,8 @@ import boto3
 import pandas as pd
 import re
 
-from dotenv import load_dotenv
-from pandas.io import json
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 endpoint_url = os.getenv('ENDPOINT_URL', False)
 client_config = {
@@ -117,7 +116,7 @@ def download_object():
         bucket = request.headers.get('x-bucket', False)
         key_name = request.headers.get('x-key-name', '')
 
-        if key_name:
+        if not key_name:
             return 'Caminho do arquivo inválido', 400
         if not bucket:
             return 'Bucket inválido', 400
