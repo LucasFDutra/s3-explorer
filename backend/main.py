@@ -3,9 +3,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import boto3
 import pandas as pd
+import re
 
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 endpoint_url = os.getenv('ENDPOINT_URL', False)
 client_config = {
@@ -27,8 +28,88 @@ def get_buckets():
     del s3_client
     return jsonify(buckets)
 
+@app.route('/get_folders_list', methods=['GET'])
+def get_folders_list():
+    bucket = request.headers.get('x-bucket', False)
+    prefix = request.headers.get('x-prefix', '')
+
+    if (prefix != '' and prefix[-1] != '/'):
+        return 'Prefixo inválido', 400
+    if not bucket:
+        return 'Bucket inválido', 400
+
+    s3_client = boto3.client(**client_config)
+    paginator = s3_client.get_paginator('list_objects')
+    result = paginator.paginate(Bucket=bucket, Prefix=prefix, Delimiter='/')
+    return_list = []
+    for folder in result.search('CommonPrefixes'):
+        if folder:
+            folder_without_prefix = re.sub(f'^{prefix}', '', folder.get('Prefix'))
+            return_list.append(folder_without_prefix.split('/')[0])
+    del s3_client
+    return jsonify(return_list)
+
 @app.route('/get_object_list', methods=['GET'])
 def get_object_list():
+    bucket = request.headers.get('x-bucket', False)
+    prefix = request.headers.get('x-prefix', '')
+    next_continuation_token = request.headers.get('x-next-continuation-token', False)
+
+    if (prefix != '' and prefix[-1] != '/'):
+        return 'Prefixo inválido', 400
+    if not bucket:
+        return 'Bucket inválido', 400
+
+    df_keys = pd.DataFrame()
+    
+    s3_client = boto3.client(**client_config)
+    list_objects_config = {
+        'Bucket': bucket,
+        'Prefix': prefix,
+        'Delimiter': '/'
+    }
+    
+    list_objects_config['MaxKeys'] = 20
+    if next_continuation_token:
+        list_objects_config['ContinuationToken'] = next_continuation_token
+
+    response = s3_client.list_objects_v2(**list_objects_config)
+    
+    if response.get('KeyCount') == 0:
+        return jsonify([])
+
+    keys = response.get('Contents', [])
+
+    df_keys = df_keys.append(
+        pd.DataFrame(keys).loc[:, [
+            'Key', 'LastModified', 'Size'
+        ]].rename(columns={
+            'Key': 'key', 'LastModified': 'last_modified', 'Size': 'size'
+        })
+    , ignore_index=True)
+
+    next_continuation_token = response.get('NextContinuationToken', False)
+    del s3_client
+    
+    df_keys.loc[:, 'tmp_key'] = df_keys.loc[:, 'key'].str.replace(f'^{prefix}', '', regex=True).str.split('/')
+    df_keys.loc[:, 'name'] = df_keys.loc[:, 'tmp_key'].str[0]
+    df_keys.loc[:, 'last_modified'] = df_keys.loc[:, 'last_modified'].dt.tz_localize(None)
+
+    df_keys = df_keys.loc[:, [
+        'name', 'last_modified', 'size', 'key'
+    ]].sort_values(by=[
+        'name', 'last_modified'
+    ], ascending=[True, True]).reset_index(drop=True)
+
+    df_keys.loc[:, 'last_modified'] = df_keys.loc[:, 'last_modified'].astype('str')
+    response_dict = {'next_continuation_token': next_continuation_token}
+    response_dict['objects'] = df_keys.to_dict('records')
+
+    return jsonify(response_dict)
+
+
+@app.route('/get_object_list_v1', methods=['GET'])
+def get_object_list_v1():
     bucket = request.headers.get('x-bucket', False)
     prefix = request.headers.get('x-prefix', '')
 
@@ -70,7 +151,7 @@ def get_object_list():
         , ignore_index=True)
     
     del s3_client
-    df_keys.loc[:, 'tmp_key'] = df_keys.loc[:, 'key'].str.replace(prefix, '').str.split('/')
+    df_keys.loc[:, 'tmp_key'] = df_keys.loc[:, 'key'].str.replace(f'^{prefix}', '', regex=True).str.split('/')
     df_keys.loc[:, 'name'] = df_keys.loc[:, 'tmp_key'].str[0]
     df_keys.loc[:, 'is_folder'] = df_keys.loc[:, 'tmp_key'].str.len() > 1
     df_keys.loc[:, 'last_modified'] = df_keys.loc[:, 'last_modified'].dt.tz_localize(None)
