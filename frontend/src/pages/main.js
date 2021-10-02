@@ -39,7 +39,7 @@ function Main() {
         if ((current_bucket === '') || (is_previus && current_prefix === '') || (is_loading_more && !next_continuation_token)){
             return
         }
-        console.log('efetuando request')
+        
         try {
             let new_prefix = current_prefix
             let new_previus
