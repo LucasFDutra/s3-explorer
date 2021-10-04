@@ -1,6 +1,6 @@
-function Spinner(params) {
+function Spinner({idName}) {
     return (
-        <div id="spinner"></div>
+        <div id={idName}></div>
     )
 }
 

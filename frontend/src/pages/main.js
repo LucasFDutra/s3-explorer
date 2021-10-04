@@ -14,6 +14,7 @@ function Main() {
     const [current_bucket, set_current_bucket] = useState('')
     const [is_empty, set_is_empty] = useState(false)
     const [is_loading, set_is_loading] = useState(false)
+    const [is_loading_search, set_is_loading_search] = useState(false)
     const [is_searching, set_is_searching] = useState(false)
     const [next_continuation_token, set_next_continuation_token] = useState(false)
     const [next_continuation_token_search, set_next_continuation_token_search] = useState(false)
@@ -75,6 +76,7 @@ function Main() {
                 "x-search-term": search_term
             }
             if (is_loading_more){
+                set_is_loading_search(true)
                 headers['x-next-continuation-token'] = next_continuation_token_search
             }
             const config = {"headers": headers}
@@ -93,6 +95,7 @@ function Main() {
             toast_control(error.response.data)
         } finally {
             set_is_loading(false)
+            set_is_loading_search(false)
         }
     }
 
@@ -186,6 +189,7 @@ function Main() {
                     download_object={download_object} 
                     is_empty={is_empty} 
                     is_loading={is_loading}
+                    is_loading_search={is_loading_search}
                     is_searching={is_searching}
                     search_objects={search_objects}
                 />

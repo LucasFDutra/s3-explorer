@@ -3,7 +3,7 @@ import FolderIcon from './folder_icon'
 import FileIcon from './file_icon'
 import Spinner from './spinner'
 
-function FilesBoard({content, search_content, get_object_list, download_object, is_empty, is_loading, is_searching, search_objects}){
+function FilesBoard({content, search_content, get_object_list, download_object, is_empty, is_loading, is_loading_search, is_searching, search_objects}){
     const [search_term, set_search_term] = useState('')
 
     useEffect(function(){
@@ -50,7 +50,7 @@ function FilesBoard({content, search_content, get_object_list, download_object, 
                 function(){
                     if (is_loading){
                         return (
-                            <Spinner />
+                            <Spinner idName="spinner"/>
                         )
                     }
                     else if (is_empty){
@@ -77,6 +77,7 @@ function FilesBoard({content, search_content, get_object_list, download_object, 
                                     function(){
                                         if (search_content.length > 0){
                                             return (
+                                                <>
                                                 <table className="table" style={{"width": "100%", "maxWidth": "100%", "minWidth": "100%", "tableLayout": "fixed"}}>
                                                     <thead>
                                                         <tr>
@@ -106,6 +107,16 @@ function FilesBoard({content, search_content, get_object_list, download_object, 
                                                     }
                                                     </tbody>
                                                 </table>
+                                                {
+                                                    function(){
+                                                        if(is_loading_search){
+                                                            return(
+                                                                <Spinner idName="bottom-spinner"/>
+                                                            )
+                                                        }
+                                                    }()
+                                                }
+                                                </>
                                             )
                                         }
                                     }()

@@ -102,6 +102,23 @@ main {
     border-top-color: #df4a16ff;
     animation: spinner 0.7s linear infinite;
 }
+
+#bottom-spinner:before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top: 98%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -20px;
+    margin-left: 110px;
+    border-radius: 50%;
+    border: 3px solid lightgray;
+    border-top-color: #df4a16ff;
+    animation: spinner 0.7s linear infinite;
+}
+
 @keyframes spinner {
     to {
         transform: rotate(360deg);
