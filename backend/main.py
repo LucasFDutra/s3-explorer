@@ -8,6 +8,7 @@ import re
 # from dotenv import load_dotenv
 # load_dotenv()
 
+buckets_to_not_show = os.getenv('BUCKETS_TO_NOT_SHOW', '')
 endpoint_url = os.getenv('ENDPOINT_URL', False)
 client_config = {
     'service_name': 's3',
@@ -25,7 +26,7 @@ def get_buckets():
     try:
         s3_client = boto3.client(**client_config)
         response = s3_client.list_buckets()
-        buckets = [bucket.get('Name') for bucket in response.get('Buckets', [])]
+        buckets = [bucket.get('Name') for bucket in response.get('Buckets', []) if bucket.get('Name') not in buckets_to_not_show.split(',')]
         del s3_client
         return jsonify(buckets)
     except Exception as e:

@@ -9,7 +9,7 @@ Ser uma aplicação de visualização e download de arquivos de buckets s3 da aw
 Tem duas maneiras, utilizando a [imagem](https://hub.docker.com/r/lucasfdutra/s3-explorer) já pronta no dockerHub ou então fazendo o build do projeto
 
 ## Utilizando Docker
-No seu arquivo docker-compose.yml deve existir as credenciais da aws no formato de variáveis de ambiente, sendo que se você quiser utilizar algo como o localstack, você pode, é só colocar qualquer credencial para as variáveis aws e definir o `ENDPOINT_URL` com o ip da sua máquina na rede interna, como o exemplo abaixo. Mas caso queira utilizar a aws de verdade, você não precisa passar o `ENDPOINT_URL`. E Também é opcional inserir a variável de ambiente `BACKEND_API_URL`, que indica o caminho para o backend da aplicação (aplicação flask, entenda melhor na [Estrutura do Projeto](#estrutura-do-projeto)), sendo que caso você não passe o endereço da api, o default é `http://0.0.0.0:5000`, logo você está supondo trabalhar localmente e que você vai espelhar a porta 5000 do container na sua 5000 (o exemplo espelha a 8000 da máquina apenas para ficar mais ilustrativo)
+No seu arquivo docker-compose.yml deve existir as credenciais da aws no formato de variáveis de ambiente, sendo que se você quiser utilizar algo como o localstack, você pode, é só colocar qualquer credencial para as variáveis aws e definir o `ENDPOINT_URL` com o ip da sua máquina na rede interna, como o exemplo abaixo. Mas caso queira utilizar a aws de verdade, você não precisa passar o `ENDPOINT_URL`. E Também é opcional inserir a variável de ambiente `BACKEND_API_URL`, que indica o caminho para o backend da aplicação (aplicação flask, entenda melhor na [Estrutura do Projeto](#estrutura-do-projeto)), sendo que caso você não passe o endereço da api, o default é `http://0.0.0.0:5000`, logo você está supondo trabalhar localmente e que você vai espelhar a porta 5000 do container na sua 5000 (o exemplo espelha a 8000 da máquina apenas para ficar mais ilustrativo). Também pode, opcionalmente, passar a váriavel `BUCKETS_TO_NOT_SHOW`, que é uma lista de buckets que não quer que sejam exibidos, essa lista tem que ser composta pelo nome exato dos buckets, separados por virgula.
 
 ```yml
 version: "3"
@@ -23,6 +23,7 @@ services:
             - AWS_SECRET_ACCESS_KEY=123
             - ENDPOINT_URL=http://192.168.0.108:4566
             - BACKEND_API_URL=http://192.168.0.108:8000
+            - BUCKETS_TO_NOT_SHOW=bucket-1,bucket-2,bucket-3
         ports:
             - "80:80"
             - "8000:5000"
