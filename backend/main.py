@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import boto3
+from botocore.client import Config
 import pandas as pd
 import re
 
@@ -121,8 +122,19 @@ def download_object():
             return 'Caminho do arquivo inválido', 400
         if not bucket:
             return 'Bucket inválido', 400
+
+        try:
+            s3_client = boto3.client(**client_config)
+            response = s3_client.get_bucket_location(
+                Bucket=bucket
+            )
+            location = response.get('LocationConstraint')
+            del s3_client
+        except Exception as e:
+            print(e)
+            return 'Esse bucket não existe', 400
         
-        s3_client = boto3.client(**client_config)
+        s3_client = boto3.client(**client_config, config=Config(signature_version='s3v4', region_name=location))
         url = s3_client.generate_presigned_url(
             ClientMethod='get_object', 
             Params={'Bucket': bucket, 'Key': key_name, 'ResponseContentType': 'application/octet-stream'},

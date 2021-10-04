@@ -34,6 +34,7 @@ O user IAM que será o dono das credenciais, deve possuir permissõa para as seg
 - list_buckets
 - list_objects_v2
 - generate_presigned_url
+- get_bucket_location
 
 Se tiver duvidas quanto as permissões, veja melhor no tópico de [Estrutura do Projeto](#estrutura-do-projeto) o porque elas são necessárias
 
