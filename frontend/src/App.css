@@ -26,6 +26,24 @@ main {
     width: 67px;
 }
 
+.my-board-component-img-list {
+    width: 1.5em;
+}
+
+.file-name-list{
+    padding-left: 1.5em !important;
+}
+
+.file-list{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.file-list:hover{
+    cursor: pointer !important;
+}
+
 .bucket-link {
     align-items: center;
     justify-content: flex-start;
