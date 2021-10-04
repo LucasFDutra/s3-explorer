@@ -3,7 +3,7 @@ import FolderIcon from './folder_icon'
 import FileIcon from './file_icon'
 import Spinner from './spinner'
 
-function FilesBoard({content, search_content, get_object_list, download_object, is_empty, is_loading, is_loading_search, is_searching, search_objects}){
+function FilesBoard({content, search_content, get_object_list, download_object, is_empty, is_loading, is_loading_more, is_loading_search, is_searching, is_table_view, search_objects}){
     const [search_term, set_search_term] = useState('')
 
     useEffect(function(){
@@ -15,15 +15,24 @@ function FilesBoard({content, search_content, get_object_list, download_object, 
     
     useEffect(function() {
         if (document.getElementById('end_of_page')){
+            if (is_table_view){
+                Array.from(document.getElementsByClassName('file-list')).forEach(function(e){
+                    if (e.offsetWidth < e.scrollWidth){
+                        e.title = e.innerText
+                    }
+                })
+            }
+
             const intersection_observer_end_of_page = new IntersectionObserver(function(entries){
                 if (entries.some(entry => entry.isIntersecting)){
+                    console.log('pegar amis')
                     get_object_list('', false, true)
                 }
             })
             intersection_observer_end_of_page.observe(document.getElementById('end_of_page'))
             return () => intersection_observer_end_of_page.disconnect();
         }
-    }, [is_loading, content])
+    }, [is_loading, content, is_table_view])
 
     useEffect(function() {
         if (document.getElementById('end_of_page_search')){
@@ -124,40 +133,101 @@ function FilesBoard({content, search_content, get_object_list, download_object, 
                             </>
                         )
                     } else {
-                        return content.map(function(e, i){
-                            return(
-                                function(){
-                                    if(e.is_folder){
-                                        return (
-                                            <FolderIcon folder_name={e.name} get_object_list={get_object_list} key={i}/>
-                                        )
-                                    } else if (content.length === i+1){
-                                        return (
-                                            <FileIcon 
-                                                idName="end_of_page" 
-                                                file_name={e.name} 
-                                                file_key={e.key} 
-                                                file_size={e.size}
-                                                file_last_modified={e.last_modified}
-                                                download_object={download_object} 
-                                                key={e.key}
-                                            />
-                                        )
-                                    } else {
-                                        return (
-                                            <FileIcon 
-                                                file_name={e.name} 
-                                                file_key={e.key} 
-                                                file_size={e.size}
-                                                file_last_modified={e.last_modified}
-                                                download_object={download_object} 
-                                                key={e.key}
-                                            />
-                                        )
+                        if(is_table_view){
+                            return (
+                                <>
+                                <table className="table" style={{"width": "100%", "maxWidth": "100%", "minWidth": "100%", "tableLayout": "fixed"}}>
+                                    <thead>
+                                        <tr>
+                                            <th width="2em" className="text-white" scope="col"></th>
+                                            <th width="30%" className="text-white file-list" scope="col">Nome</th>
+                                            <th width="10%" className="text-white file-list" scope="col">Size</th>
+                                            <th width="20%" className="text-white file-list" scope="col">Data De Modificação</th>
+                                            <th width="40%" className="text-white file-list" scope="col">Key</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        content.map(function(e,i){
+                                            return(
+                                                function(){
+                                                    if(e.is_folder){
+                                                        return (
+                                                            <FolderIcon folder_name={e.name} get_object_list={get_object_list} key={i} is_list_format={true}/>
+                                                        )
+                                                    } else{
+                                                        return (
+                                                            <FileIcon 
+                                                                idName={i+1 === content.length ? "end_of_page" : null}
+                                                                file_name={e.name} 
+                                                                file_key={e.key} 
+                                                                file_size={e.size}
+                                                                file_last_modified={e.last_modified}
+                                                                download_object={download_object} 
+                                                                is_list_format={true}
+                                                                key={e.key}
+                                                            />
+                                                        )
+                                                    }
+                                                }()
+                                            )
+                                        })
                                     }
-                                }()
+                                    </tbody>
+                                </table>
+                                {
+                                    function(){
+                                        if(is_loading_more){
+                                            return(
+                                                <Spinner idName="bottom-spinner"/>
+                                            )
+                                        }
+                                    }()
+                                }
+                                </>
                             )
-                        })
+                        } else {
+                            return (
+                                <>
+                                {
+                                    function(){
+                                        return content.map(function(e, i){
+                                            return(
+                                                function(){
+                                                    if(e.is_folder){
+                                                        return (
+                                                            <FolderIcon folder_name={e.name} get_object_list={get_object_list} key={i}/>
+                                                        )
+                                                    } else {
+                                                        return (
+                                                            <FileIcon 
+                                                                idName={i+1 === content.length ? "end_of_page" : null}
+                                                                file_name={e.name} 
+                                                                file_key={e.key} 
+                                                                file_size={e.size}
+                                                                file_last_modified={e.last_modified}
+                                                                download_object={download_object} 
+                                                                key={e.key}
+                                                            />
+                                                        )
+                                                    }
+                                                }()
+                                            )
+                                        })
+                                    }()
+                                }
+                                {
+                                    function(){
+                                        if(is_loading_more){
+                                            return(
+                                                <Spinner idName="bottom-spinner"/>
+                                            )
+                                        }
+                                    }()
+                                }
+                                </>
+                            )
+                        }
                     }
                 }()
             }

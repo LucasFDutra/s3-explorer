@@ -18,6 +18,8 @@ function Main() {
     const [is_searching, set_is_searching] = useState(false)
     const [next_continuation_token, set_next_continuation_token] = useState(false)
     const [next_continuation_token_search, set_next_continuation_token_search] = useState(false)
+    const [is_table_view, set_is_table_view] = useState(false)
+    const [is_loading_more_icon, set_is_loading_more_icon] = useState(false)
 
     useEffect(function(){
         get_buckets()
@@ -85,9 +87,7 @@ function Main() {
             if (response.data.objects.length === 0){
                 set_files_board_search_content([])
                 set_next_continuation_token_search(false)
-                //set_is_empty(true)
             } else {
-                //set_is_empty(false)
                 set_next_continuation_token_search(response.data.next_continuation_token)
                 set_files_board_search_content((currentList) => [...currentList, ...response.data.objects])
             } 
@@ -134,6 +134,7 @@ function Main() {
                 "x-prefix": new_prefix
             }
             if (is_loading_more){
+                set_is_loading_more_icon(true)
                 headers['x-next-continuation-token'] = next_continuation_token
             }
             const config = {"headers": headers}
@@ -151,6 +152,7 @@ function Main() {
             toast_control(error.response.data)
         } finally {
             set_is_loading(false)
+            set_is_loading_more_icon(false)
         }
     }
 
@@ -179,7 +181,7 @@ function Main() {
 
     return (
         <>
-            <Header current_folder={current_prefix} previus_folder={previus_prefix} get_object_list={get_object_list}/>
+            <Header current_folder={current_prefix} previus_folder={previus_prefix} get_object_list={get_object_list} set_is_table_view={set_is_table_view}/>
             <main>
                 <BucketSelector buckets_list={buckets_list} set_current_bucket={set_current_bucket} is_loading={is_loading}/>
                 <FilesBoard 
@@ -191,6 +193,8 @@ function Main() {
                     is_loading={is_loading}
                     is_loading_search={is_loading_search}
                     is_searching={is_searching}
+                    is_table_view={is_table_view}
+                    is_loading_more={is_loading_more_icon}
                     search_objects={search_objects}
                 />
             </main>
