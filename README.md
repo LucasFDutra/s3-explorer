@@ -63,6 +63,8 @@ O nginx é responsável por ouvir as portas 80 e 5000, sendo que se uma requisi�
 - Listar os buckets da conta
 - Listar os objetos de um dado bucket
     - A lista de arquivos carrega de 1000 em 1000 por pasta, sendo que ao chegar no final da pasta o frontend faz a requisição automaticamente para o backend (caso exista algo a ser puxado)
+- Buscar objetos
+    - Se quiser buscar um objeto, aperte ctrl+f para abrir a barra de pesquisas, e digite o que está buscando. A busca é feita a partir do diretório que estiver, sendo ela case-insensitive. A busca retorna uma quantidade de resultados, e o restante vai sendo carregado automaticamente com scroll infinito, caso não carregue mais nada ao chegar no final da página, ou tenha menos de 50 itens, quer dizer que acabou o conteúdo.
 - Efetuar o download do objeto
     - O download é feito da seguinte forma: No momento em que um arquivo recebe um duplo click no frontend, o backend utiliza a sdk, e gera um link pré-assinado, somente para esse arquivo, com duração de apenas 2 segundos. Ou seja, por dois segundos, o objeto que quer efetuar o download recebe uma URL pública, sendo tempo suficiente apenas para que a url saia do backend, chegue no frontend e então começe a efetuar o download, ou seja, tempo suficiente apenas para que o frontend consiga fazer a conexão TCP com o servidor da aws (dois segundos pode ser muito, mas estou pensando também em casos de uso de internets mais lentas, mas estou considerando deixar esse parâmetro mais facilmente configurável por variável de ambiente). Depois disso a url não fica mais válida (caso o arquivo seja grande ao ponto de levar mais que dois segundos para baixar, não tem problema, pois a conexão já existe, então o download irá terminar normalmente, porém não é possível utilizar a mesma URL para tentar baixar novamente). Recomendo dar uma lida [nesse artigo](https://docs.aws.amazon.com/pt_br/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html) da aws sobre as urls pré-assinadas. `Mas veja bem, se essa abordagem de deixar seus arquivos públicos por um instante que seja, não é bem vista, você pode limitar o acesso por meio de permissões na aws, ou então não utilize esse ferramenta, ou pelo menos não faça downloads com ela, só utilize para visualizar`.
 
@@ -72,5 +74,4 @@ O nginx é responsável por ouvir as portas 80 e 5000, sendo que se uma requisi�
 O Tema de icones que utilizei foi retirado do projeto [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/), eu peguei alguns icones específicos que eu gostei, e achei que ficaram legais com meu projeto. O download foi efetuado pelo [gnome-look.org](https://www.gnome-look.org/p/1166289/), e então copiei os .svg e coloquei dentro da pasta `frontend/src/icons`.
 
 # Futuras implementações
-- Sistema de busca
 - Permitir que o usuário ordene por dada ta modificação
