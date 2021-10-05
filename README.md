@@ -9,7 +9,14 @@ Ser uma aplicação de visualização e download de arquivos de buckets s3 da aw
 Tem duas maneiras, utilizando a [imagem](https://hub.docker.com/r/lucasfdutra/s3-explorer) já pronta no dockerHub ou então fazendo o build do projeto
 
 ## Utilizando Docker
-No seu arquivo docker-compose.yml deve existir as credenciais da aws no formato de variáveis de ambiente, sendo que se você quiser utilizar algo como o localstack, você pode, é só colocar qualquer credencial para as variáveis aws e definir o `ENDPOINT_URL` com o ip da sua máquina na rede interna, como o exemplo abaixo. Mas caso queira utilizar a aws de verdade, você não precisa passar o `ENDPOINT_URL`. E Também é opcional inserir a variável de ambiente `BACKEND_API_URL`, que indica o caminho para o backend da aplicação (aplicação flask, entenda melhor na [Estrutura do Projeto](#estrutura-do-projeto)), sendo que caso você não passe o endereço da api, o default é `http://0.0.0.0:5000`, logo você está supondo trabalhar localmente e que você vai espelhar a porta 5000 do container na sua 5000 (o exemplo espelha a 8000 da máquina apenas para ficar mais ilustrativo). Também pode, opcionalmente, passar a váriavel `BUCKETS_TO_NOT_SHOW`, que é uma lista de buckets que não quer que sejam exibidos, essa lista tem que ser composta pelo nome exato dos buckets, separados por virgula.
+No seu arquivo docker-compose.yml deve existir as credenciais da aws no formato de variáveis de ambiente, sendo que se você quiser utilizar algo como o localstack, você pode, é só colocar qualquer credencial para as variáveis aws e definir o `ENDPOINT_URL` com o ip da sua máquina na rede interna, como o exemplo abaixo. Mas caso queira utilizar a aws de verdade, você não precisa passar o `ENDPOINT_URL`. 
+
+Também pode, opcionalmente, definir quais buckets exibir, tem duas formas de fazer isso. Pela variável `BUCKETS_TO_NOT_SHOW` e `BUCKETS_TO_SHOW`, sendo que essas duas são listas de buckets, que devem ter o nome completo e exato do bucket.
+
+- `BUCKETS_TO_NOT_SHOW`: Lista quais buckets não serão exibidos
+- `BUCKETS_TO_SHOW`: Lista quais serão exibidos, sendo que essa inativa a `BUCKETS_TO_NOT_SHOW`. Ou seja, se essa variável existir, os buckets exibidos serão exatamente esses, e o resto será ocultado.
+
+> OBS: Essas duas variáveis são opcionais, sendo que se você tiver poucos buckets a ocultar, então defina a BUCKETS_TO_NOT_SHOW, mas se tiver mais buckets a ocultar do que a mostrar então defina apenas o que quer mostar com a BUCKETS_TO_SHOW
 
 ```yml
 version: "3"
@@ -22,11 +29,9 @@ services:
             - AWS_ACCESS_KEY_ID=123
             - AWS_SECRET_ACCESS_KEY=123
             - ENDPOINT_URL=http://192.168.0.108:4566
-            - BACKEND_API_URL=http://192.168.0.108:8000
             - BUCKETS_TO_NOT_SHOW=bucket-1,bucket-2,bucket-3
         ports:
             - "80:80"
-            - "8000:5000"
 ```
 
 ## Permissões
@@ -39,7 +44,8 @@ O user IAM que será o dono das credenciais, deve possuir permissõa para as seg
 Se tiver duvidas quanto as permissões, veja melhor no tópico de [Estrutura do Projeto](#estrutura-do-projeto) o porque elas são necessárias
 
 ## Fazer o Build do Projeto:
-Entre na pasta `/frontend/public` e modifique o arquivo `config.js`, para indicar o endereço da api de backend (aplicação flask). E depois disso você vai precisar criar o build da aplicação react e alocá-la onde achar melhor.
+Entre na pasta `/frontend/src/utils/api.js` e modifique o caminho para o backend python de forma a ficar como você necessitar. E uma vez que você configurou esse caminho, você pode executar o comando de biuld do react
+
 ```sh
 npm run build
 ```
@@ -57,7 +63,7 @@ O projeto utiliza 4 tecnologias. Docker, Nginx, React e Python/Flask.
 
 O container utilizado foi o container do nginx, o qual passou por algumas costumizações. Eu instalei o python dentro do container, e as libs necessárias para o projeto. Enviei para dentro desse container os arquivos do backend, sendo eles o codigo python que é uma api flask, que interagem com o frontend e com o s3 por meio da sdk da aws, e o arquivo app.ini, responsável por configurar o uwsgi. Também enviei os arquivos html, js, css do projeto react (build do projeto) e os arquivos de configuração do nginx.
 
-O nginx é responsável por ouvir as portas 80 e 5000, sendo que se uma requisição chegar pela porta 80 ela é destinada a aplicação react, ou seja, a porta 80 é destinada a servir o frontend. Já a porta 5000 é para o backend, que se comunica com o nginx por meio do protocolo de socket com o uwsgi.
+O nginx é responsável por ouvir as portas 80, sendo que se uma requisição chegar no `/` ela é destinada a aplicação react, já se a requisição chegar por `/api` ela é para o backend, que se comunica com o nginx por meio do protocolo de socket com o uwsgi.
 
 <img src='./images/esquema.svg' />
 

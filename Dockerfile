@@ -2,7 +2,6 @@ FROM nginx:latest
 
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/s3-explorer.conf /etc/nginx/conf.d/s3-explorer.conf
-COPY nginx/s3-explorer-api.conf /etc/nginx/conf.d/s3-explorer-api.conf
 COPY frontend/build /usr/share/nginx/html
 
 RUN apt update && apt upgrade -y

@@ -10,6 +10,7 @@ import re
 # load_dotenv()
 
 buckets_to_not_show = os.getenv('BUCKETS_TO_NOT_SHOW', '')
+buckets_to_show = os.getenv('BUCKETS_TO_SHOW', False)
 endpoint_url = os.getenv('ENDPOINT_URL', False)
 client_config = {
     'service_name': 's3',
@@ -22,19 +23,22 @@ if endpoint_url:
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/get_buckets', methods=['GET'])
+@app.route('/api/get_buckets', methods=['GET'])
 def get_buckets():
     try:
         s3_client = boto3.client(**client_config)
         response = s3_client.list_buckets()
-        buckets = [bucket.get('Name') for bucket in response.get('Buckets', []) if bucket.get('Name') not in buckets_to_not_show.split(',')]
+        if buckets_to_show:
+            buckets = [bucket.get('Name') for bucket in response.get('Buckets', []) if bucket.get('Name') in buckets_to_show.split(',')]
+        else:
+            buckets = [bucket.get('Name') for bucket in response.get('Buckets', []) if bucket.get('Name') not in buckets_to_not_show.split(',')]
         del s3_client
         return jsonify(buckets)
     except Exception as e:
         print(e)
         return 'Oops! ocorreu um erro inesperado', 500
 
-@app.route('/get_object_list', methods=['GET'])
+@app.route('/api/get_object_list', methods=['GET'])
 def get_object_list():
     try:
         bucket = request.headers.get('x-bucket', False)
@@ -112,7 +116,7 @@ def get_object_list():
         print(e)
         return 'Oops! ocorreu um erro inesperado', 500
 
-@app.route('/download_object', methods=['GET'])
+@app.route('/api/download_object', methods=['GET'])
 def download_object():
     try:
         bucket = request.headers.get('x-bucket', False)
@@ -147,7 +151,7 @@ def download_object():
         print(e)
         return 'Oops! ocorreu um erro inesperado', 500
 
-@app.route('/search_object', methods=['GET'])
+@app.route('/api/search_object', methods=['GET'])
 def search_object():
     try:
         bucket = request.headers.get('x-bucket', False)

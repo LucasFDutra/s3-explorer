@@ -25,11 +25,11 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.5037598"
-     inkscape:cx="381.37739"
-     inkscape:cy="209.14244"
-     inkscape:window-width="2506"
-     inkscape:window-height="1016"
-     inkscape:window-x="1420"
+     inkscape:cx="350.78741"
+     inkscape:cy="170.57245"
+     inkscape:window-width="1312"
+     inkscape:window-height="704"
+     inkscape:window-x="54"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1"
@@ -292,7 +292,7 @@
          id="tspan3588-0"
          style="stroke-width:0.115265"
          x="100.99643"
-         y="42.50639">:5000</tspan></text>
+         y="42.50639">/api</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:2.76637px;line-height:1.25;font-family:sans-serif;stroke-width:0.115265"
@@ -303,23 +303,18 @@
          id="tspan4530-3"
          style="stroke-width:0.115265"
          x="91.819427"
-         y="11.824912">:80 retorna o frontend</tspan></text>
+         y="11.824912">/ retorna o frontend</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:2.76637px;line-height:1.25;font-family:sans-serif;stroke-width:0.115265"
-       x="58.145115"
-       y="24.666906"
+       x="59.176243"
+       y="28.186283"
        id="text5804-7"><tspan
          sodipodi:role="line"
-         id="tspan5802-5"
          style="stroke-width:0.115265"
-         x="58.145115"
-         y="24.666906">80:80</tspan><tspan
-         sodipodi:role="line"
-         style="stroke-width:0.115265"
-         x="58.145115"
-         y="28.12487"
-         id="tspan5806-9">5000:5000</tspan></text>
+         x="59.176243"
+         y="28.186283"
+         id="tspan5806-9">80:80</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.246141;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Lstart-5);marker-end:url(#Arrow1Lend-9)"
        d="m 146.36656,43.375251 h 40.00451"

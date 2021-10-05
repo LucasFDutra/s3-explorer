@@ -22,10 +22,10 @@ function Header({current_folder, previus_folder, get_object_list, set_is_table_v
                     <h6 className="m-2 ms-3 text-white">{current_folder.slice(0,current_folder.length-1)}</h6>
                 </div>
                 <button id="grid-view-button" onClick={() => handle_view_change(true)} className="btn btn-outline-secondary text-white btn-files-view-selected" style={{borderRadius: "4px 0 0 4px"}}>
-                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                    <i className="bi bi-grid-3x3-gap-fill"></i>
                 </button>
                 <button id="list-view-button" onClick={() => handle_view_change(false)} className="btn btn-outline-secondary btn-files-view text-white" style={{borderRadius: "0 4px 4px 0", borderLeft: 0}}>
-                    <i class="bi bi-list-task"></i>
+                    <i className="bi bi-list-task"></i>
                 </button>
             </div>
         </nav>
