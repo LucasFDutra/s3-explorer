@@ -192,6 +192,7 @@ def search_object():
             , ignore_index=True)
 
             df_keys.loc[:, 'tmp_key'] = df_keys.loc[:, 'key'].str.replace(f'^{prefix}', '', regex=True)
+            df_keys.loc[:, 'tmp_key'] = df_keys.loc[:, 'tmp_key'] + df_keys.loc[:, 'last_modified'].dt.tz_localize(None).astype('str')
             df_keys = df_keys.loc[df_keys.loc[:, 'tmp_key'].str.lower().str.contains(search_term.lower()), :].reset_index(drop=True)
 
             next_continuation_token = response.get('NextContinuationToken', False)
