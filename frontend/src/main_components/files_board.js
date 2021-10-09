@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import FolderIcon from '../components/folder_icon'
-import FileIcon from '../components/file_icon'
 import Spinner from '../components/spinner'
 import TableView from '../components/table_view'
 import GridView from '../components/grid_view'

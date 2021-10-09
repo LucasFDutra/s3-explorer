@@ -8,7 +8,6 @@ function BucketSelector({buckets_list, set_current_bucket, is_loading}){
             sidbar.classList.remove('sidbar-hidden')
         } else {
             sidbar.classList.add('sidbar-hidden')
-            // .sidbar-show
         }
     }
 
