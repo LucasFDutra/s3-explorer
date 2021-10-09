@@ -6,8 +6,8 @@ from botocore.client import Config
 import pandas as pd
 import re
 
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 buckets_to_not_show = os.getenv('BUCKETS_TO_NOT_SHOW', '')
 buckets_to_show = os.getenv('BUCKETS_TO_SHOW', False)

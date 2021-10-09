@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react'
 import {api} from '../utils/api'
-import Header from '../components/header'
-import BucketSelector from '../components/bucket_selector'
-import FilesBoard from '../components/files_board'
+import Header from '../main_components/header'
+import BucketSelector from '../main_components/bucket_selector'
+import FilesBoard from '../main_components/files_board'
 import toast_control from '../utils/toast_control'
 
 function Main() {
+    const [buckets_list, set_buckets_list] = useState([])
     const [files_board_content, set_files_board_content] = useState([])
     const [files_board_search_content, set_files_board_search_content] = useState([])
-    const [buckets_list, set_buckets_list] = useState([])
+
     const [current_prefix, set_current_prefix] = useState('')
     const [previus_prefix, set_previus_prefix] = useState('')
     const [current_bucket, set_current_bucket] = useState('')
+    
     const [is_empty, set_is_empty] = useState(false)
     const [is_loading, set_is_loading] = useState(false)
-    const [is_loading_search, set_is_loading_search] = useState(false)
     const [is_searching, set_is_searching] = useState(false)
+    const [is_table_view, set_is_table_view] = useState(false)
+    const [is_loading_more, set_is_loading_more] = useState(false)
+    
     const [next_continuation_token, set_next_continuation_token] = useState(false)
     const [next_continuation_token_search, set_next_continuation_token_search] = useState(false)
-    const [is_table_view, set_is_table_view] = useState(false)
-    const [is_loading_more_icon, set_is_loading_more_icon] = useState(false)
 
     useEffect(function(){
         get_buckets()
@@ -72,13 +74,14 @@ function Main() {
                 set_files_board_search_content([])
                 set_is_loading(true)
             }
+
             const headers = {
                 "x-bucket": current_bucket,
                 "x-prefix": current_prefix,
                 "x-search-term": search_term
             }
             if (is_loading_more){
-                set_is_loading_search(true)
+                set_is_loading_more(true)
                 headers['x-next-continuation-token'] = next_continuation_token_search
             }
             const config = {"headers": headers}
@@ -95,7 +98,7 @@ function Main() {
             toast_control(error.response.data)
         } finally {
             set_is_loading(false)
-            set_is_loading_search(false)
+            set_is_loading_more(false)
         }
     }
 
@@ -134,7 +137,7 @@ function Main() {
                 "x-prefix": new_prefix
             }
             if (is_loading_more){
-                set_is_loading_more_icon(true)
+                set_is_loading_more(true)
                 headers['x-next-continuation-token'] = next_continuation_token
             }
             const config = {"headers": headers}
@@ -152,7 +155,7 @@ function Main() {
             toast_control(error.response.data)
         } finally {
             set_is_loading(false)
-            set_is_loading_more_icon(false)
+            set_is_loading_more(false)
         }
     }
 
@@ -181,7 +184,14 @@ function Main() {
 
     return (
         <>
-            <Header current_folder={current_prefix} previus_folder={previus_prefix} get_object_list={get_object_list} set_is_table_view={set_is_table_view}/>
+            <Header 
+                current_folder={current_prefix} 
+                previus_folder={previus_prefix} 
+                get_object_list={get_object_list} 
+                set_is_table_view={set_is_table_view} 
+                is_loading={is_loading} 
+                is_loading_more={is_loading_more}
+            />
             <main>
                 <BucketSelector buckets_list={buckets_list} set_current_bucket={set_current_bucket} is_loading={is_loading}/>
                 <FilesBoard 
@@ -191,10 +201,9 @@ function Main() {
                     download_object={download_object} 
                     is_empty={is_empty} 
                     is_loading={is_loading}
-                    is_loading_search={is_loading_search}
                     is_searching={is_searching}
                     is_table_view={is_table_view}
-                    is_loading_more={is_loading_more_icon}
+                    is_loading_more={is_loading_more}
                     search_objects={search_objects}
                 />
             </main>

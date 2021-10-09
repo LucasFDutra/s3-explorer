@@ -1,4 +1,11 @@
-function Header({current_folder, previus_folder, get_object_list, set_is_table_view}){
+function Header({current_folder, previus_folder, get_object_list, set_is_table_view, is_loading, is_loading_more}){
+    function handle_back_folder(){
+        if (!is_loading && !is_loading_more){
+            console.log('aqiiiii')
+            get_object_list(previus_folder, true)
+        }
+    }
+    
     function handle_view_change(is_grid){
         if (is_grid){
             set_is_table_view(false)
@@ -15,7 +22,7 @@ function Header({current_folder, previus_folder, get_object_list, set_is_table_v
         <>
         <nav className="navbar sticky-top navbar-expand-lg bg-dark navbar-dark" style={{height: '9vh'}}>
             <div className="ms-4 me-2 d-flex align-items-center w-100">
-                <button onClick={() => {get_object_list(previus_folder, true)}} className="btn btn-outline-secondary">
+                <button onClick={() => {handle_back_folder()}} className="btn btn-outline-secondary">
                     <i className="bi bi-chevron-left"></i>
                 </button>
                 <div className="mx-2 rounded" style={{height: '2.2em', width: '-webkit-fill-available', background: '#282c34ff'}}>

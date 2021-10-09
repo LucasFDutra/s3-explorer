@@ -1,4 +1,4 @@
-import Bucket from './bucket'
+import Bucket from '../components/bucket'
 
 function BucketSelector({buckets_list, set_current_bucket, is_loading}){
     return (

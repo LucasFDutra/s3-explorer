@@ -34,17 +34,17 @@ main {
     width: 1.5em;
 }
 
-.file-name-list{
+.table-content-file-name{
     padding-left: 1.5em !important;
 }
 
-.file-list{
+.table-content{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.file-list:hover{
+.table-content:hover{
     cursor: pointer !important;
 }
 
