@@ -3,7 +3,7 @@ import FileIcon from "./file_icon"
 
 function GridView({content, end_of_page_id, download_object, get_object_list}){
     return (
-        <>
+        <div className="p-2 ps-4 d-flex align-content-start flex-wrap">
         {
             function(){
                 return content.map(function(e, i){
@@ -31,7 +31,7 @@ function GridView({content, end_of_page_id, download_object, get_object_list}){
                 })
             }()
         }
-        </>
+        </div>
     )
 }
 

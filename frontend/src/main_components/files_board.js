@@ -52,7 +52,7 @@ function FilesBoard({content, search_content, get_object_list, search_objects, d
     }, [is_loading, search_content])
 
     return (
-        <div className="p-2 ps-4 d-flex align-content-start flex-wrap" id="files-board">
+        <div id="files-board">
             {
                 function(){
                     if (is_loading){
@@ -72,7 +72,7 @@ function FilesBoard({content, search_content, get_object_list, search_objects, d
                                         return(   
                                             <input 
                                                 id="search_bar" 
-                                                className="border-0 rounded text-white rounded bg-dark" 
+                                                className="mx-4 mt-3 border-0 rounded text-white rounded bg-dark" 
                                                 autoFocus 
                                                 value={search_term}
                                                 onChange={(event) => set_search_term(event.target.value)}

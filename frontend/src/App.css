@@ -10,15 +10,8 @@ main {
 #buckets-sidbar {
     width: 280px;
     overflow-x: hidden;
-}
-
-.sidbar-show {
-    overflow-y: scroll;
-}
-
-.sidbar-hidden {
-    overflow-y: hidden;
-    margin-left: -265px;
+    height: 100vh;
+    position: relative;
 }
 
 #sidbar-hidden-span {
@@ -28,10 +21,23 @@ main {
     border-radius: 0 5px 5px 0; 
     position: absolute; 
     top: 50vh;
+    left: 0;
+    cursor: pointer;
+    z-index: 2;
 } 
 
 #sidbar-hidden-span:active {
     background-color: rgba(223, 76, 22, 0.473);
+}
+
+#sidbar-risezer {
+    width: 5px;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0);
+    cursor: col-resize;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .btn:focus {
@@ -79,7 +85,6 @@ main {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    width: 12rem;
 }
 
 .bucket-link:hover {
@@ -94,6 +99,7 @@ main {
     width: -webkit-fill-available;
     overflow-y: scroll;
     background: #282c34ff;
+    position: relative;
 }
 
 ::-webkit-scrollbar {
@@ -120,7 +126,6 @@ main {
     width: 60px;
     height: 60px;
     margin-top: -30px;
-    margin-left: var(--margin_left);
     border-radius: 50%;
     border: 3px solid lightgray;
     border-top-color: #df4a16ff;
@@ -131,16 +136,15 @@ main {
     content: "";
     box-sizing: border-box;
     position: absolute;
-    top: 98%;
     left: 50%;
     width: 20px;
     height: 20px;
     margin-top: -20px;
-    margin-left: var(--margin_left);
     border-radius: 50%;
     border: 3px solid lightgray;
     border-top-color: #df4a16ff;
     animation: spinner 0.7s linear infinite;
+    z-index: 2;
 }
 
 @keyframes spinner {
@@ -154,7 +158,7 @@ main {
     top: 50%;
     left: 50%;
     color: grey;
-    margin-left: 80px;
+    margin-left: -84px;
 }
 
 #search_bar{

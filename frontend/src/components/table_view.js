@@ -3,6 +3,7 @@ import FileIcon from "./file_icon"
 
 function TableView({content, end_of_page_id, download_object, get_object_list}){
     return (
+        <div className="p-2 ps-4 d-flex align-content-start flex-wrap">
         <table className="table" style={{"width": "100%", "maxWidth": "100%", "minWidth": "100%", "tableLayout": "fixed"}}>
             <thead>
                 <tr>
@@ -42,6 +43,7 @@ function TableView({content, end_of_page_id, download_object, get_object_list}){
             }
             </tbody>
         </table>
+        </div>
     )
 }
 

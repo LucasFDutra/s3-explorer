@@ -138,6 +138,11 @@ function Main() {
             }
             if (is_loading_more){
                 set_is_loading_more(true)
+                function sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+                await sleep(5000)
+
                 headers['x-next-continuation-token'] = next_continuation_token
             }
             const config = {"headers": headers}
