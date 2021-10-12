@@ -198,7 +198,11 @@ function Main() {
                 is_loading_more={is_loading_more}
             />
             <main>
-                <BucketSelector buckets_list={buckets_list} set_current_bucket={set_current_bucket} is_loading={is_loading}/>
+                <BucketSelector 
+                    buckets_list={buckets_list} 
+                    set_current_bucket={set_current_bucket} 
+                    is_loading={is_loading}
+                />
                 <FilesBoard 
                     content={files_board_content} 
                     search_content={files_board_search_content}
