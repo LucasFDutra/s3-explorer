@@ -1,8 +1,13 @@
-function Header({current_folder, previus_folder, get_object_list, set_is_table_view, is_loading, is_loading_more}){
+import { useContext } from 'react'
+import { AppContext } from '../utils/contexts'
+
+
+function Header({get_object_list}){
+    const {current_prefix, previus_prefix, set_is_table_view, is_loading, is_loading_more} = useContext(AppContext)
+
     function handle_back_folder(){
         if (!is_loading && !is_loading_more){
-            console.log('aqiiiii')
-            get_object_list(previus_folder, true)
+            get_object_list(previus_prefix, true)
         }
     }
     
@@ -26,7 +31,7 @@ function Header({current_folder, previus_folder, get_object_list, set_is_table_v
                     <i className="bi bi-chevron-left"></i>
                 </button>
                 <div className="mx-2 rounded" style={{height: '2.2em', width: '-webkit-fill-available', background: '#282c34ff'}}>
-                    <h6 className="m-2 ms-3 text-white">{current_folder.slice(0,current_folder.length-1)}</h6>
+                    <h6 className="m-2 ms-3 text-white">{current_prefix.slice(0,current_prefix.length-1)}</h6>
                 </div>
                 <button id="grid-view-button" onClick={() => handle_view_change(true)} className="btn btn-outline-secondary text-white btn-files-view-selected" style={{borderRadius: "4px 0 0 4px"}}>
                     <i className="bi bi-grid-3x3-gap-fill"></i>

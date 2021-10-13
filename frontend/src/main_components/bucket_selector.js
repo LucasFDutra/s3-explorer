@@ -1,7 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import Bucket from '../components/bucket'
+import { AppContext } from '../utils/contexts'
 
-function BucketSelector({buckets_list, set_current_bucket, is_loading}){
+
+function BucketSelector(){
+    const {buckets_list} = useContext(AppContext)
+
     useEffect(function(){
         const sidbar = document.getElementById('buckets-sidbar')
         document.getElementById('sidbar-risezer').addEventListener('mousedown', mousedown)
@@ -61,7 +65,7 @@ function BucketSelector({buckets_list, set_current_bucket, is_loading}){
                 {
                     buckets_list.map(function(e){
                         return(
-                            <Bucket bucket_name={e} key={e} set_current_bucket={set_current_bucket} is_loading={is_loading}/>
+                            <Bucket bucket_name={e} key={e}/>
                         )
                     })
                 }
