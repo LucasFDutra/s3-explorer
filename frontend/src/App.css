@@ -49,29 +49,17 @@ main {
     background-color: #df4a16ff;
 }
 
-.my-board-component:hover {
+.board-component:hover {
     cursor: pointer;
 }
 
-.my-board-component-img {
-    width: 67px;
-}
-
-.my-board-component-img-list {
-    width: 1.5em;
-}
-
-.table-content-file-name{
-    padding-left: 1.5em !important;
-}
-
-.table-content{
+.files-board-content{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.table-content:hover{
+.files-board-content:hover{
     cursor: pointer !important;
 }
 

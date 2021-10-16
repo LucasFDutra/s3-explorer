@@ -52,25 +52,24 @@ function def_icon(file_name) {
     return extentions[file_extention] ? extentions[file_extention] : extentions['others']
 }
 
-function FileIcon({idName, file_name, file_size, file_last_modified, file_key, download_object, is_list_format}){
+function FileIcon({idName, file_name, file_size, file_last_modified, file_key, download_object, is_list_format}){   
     if (is_list_format){
         return (
             <tr id={idName} onDoubleClick={() => {download_object(file_name, file_key)}}>
-                <th scope="row"><img src={def_icon(file_name)} className="my-board-component-img-list" alt=''/></th>
-                <td className="text-white table-content-file-name table-content">{file_name}</td>
-                <td className="text-white table-content">{format_bytes(file_size)}</td>
-                <td className="text-white table-content">{file_last_modified}</td>
-                <td className="text-white table-content">{file_key}</td>
+                <th scope="row"><img src={def_icon(file_name)} alt='' style={{"width": "1.5em"}}/></th>
+                <td className="text-white files-board-content" style={{"paddingLeft": "1.5em"}}>{file_name}</td>
+                <td className="text-white files-board-content">{format_bytes(file_size)}</td>
+                <td className="text-white files-board-content">{file_last_modified}</td>
+                <td className="text-white files-board-content">{file_key}</td>
             </tr>
         )
     } else {
         return (
-            <div id={idName} className="me-2 d-flex flex-column align-items-center justify-content-center my-board-component">
-                <img onDoubleClick={() => {download_object(file_name, file_key)}} src={def_icon(file_name)} className="my-board-component-img" alt=''/>
+            <div id={idName} className="me-2 d-flex flex-column align-items-center justify-content-center board-component">
+                <img onDoubleClick={() => {download_object(file_name, file_key)}} src={def_icon(file_name)} alt='' style={{"width": "67px"}}/>
                 <span 
-                    className="text-white text-center" 
+                    className="text-white text-center files-board-content" 
                     style={{width: "8rem", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}} 
-                    title={file_name.length > 13 ? file_name : null}
                 >
                         {file_name}
                 </span>

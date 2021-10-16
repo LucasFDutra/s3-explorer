@@ -17,42 +17,28 @@ function FilesBoard({get_object_list, search_objects, download_object}){
     }, [search_term])
     
     useEffect(function() {
-        if (document.getElementById('end_of_page')){
-            if (is_table_view){
-                Array.from(document.getElementsByClassName('file-list')).forEach(function(e){
-                    if (e.offsetWidth < e.scrollWidth){
-                        e.title = e.innerText
-                    }
-                })
+        const board_content = document.getElementsByClassName('files-board-content')
+        Array.from(board_content).forEach(function(e){
+            if (e.offsetWidth < e.scrollWidth){
+                e.title = e.innerText
             }
+        })
 
-            const intersection_observer_end_of_page = new IntersectionObserver(function(entries){
+        const end_of_page_element = document.getElementById('end_of_page')
+        if (end_of_page_element){
+            const io_end_of_page = new IntersectionObserver(function(entries){
                 if (entries.some(entry => entry.isIntersecting)){
-                    get_object_list('', false, true)
+                    if (is_searching){
+                        search_objects(search_term, true)
+                    } else {
+                        get_object_list('', false, true)
+                    }
                 }
             })
-            intersection_observer_end_of_page.observe(document.getElementById('end_of_page'))
-            return () => intersection_observer_end_of_page.disconnect();
+            io_end_of_page.observe(end_of_page_element)
+            return () => io_end_of_page.disconnect();
         }
-    }, [is_loading, files_board_content, is_table_view])
-
-    useEffect(function() {
-        if (document.getElementById('end_of_page_search')){
-            Array.from(document.getElementsByClassName('table-content')).forEach(function(e){
-                if (e.offsetWidth < e.scrollWidth){
-                    e.title = e.innerText
-                }
-            })
-
-            const intersection_observer_end_of_page_search = new IntersectionObserver(function(entries){
-                if (entries.some(entry => entry.isIntersecting)){
-                    search_objects(search_term, true)
-                }
-            })
-            intersection_observer_end_of_page_search.observe(document.getElementById('end_of_page_search'))
-            return () => intersection_observer_end_of_page_search.disconnect();
-        }
-    }, [is_loading, files_board_search_content])
+    }, [is_loading, files_board_content, files_board_search_content, is_table_view])
 
     return (
         <div id="files-board">
@@ -87,7 +73,7 @@ function FilesBoard({get_object_list, search_objects, download_object}){
                                     function(){
                                         if (files_board_search_content.length > 0){
                                             return (
-                                                <TableView content={files_board_search_content} end_of_page_id="end_of_page_search" download_object={download_object}/>
+                                                <TableView content={files_board_search_content} end_of_page_id="end_of_page" download_object={download_object}/>
                                             )
                                         }
                                     }()
