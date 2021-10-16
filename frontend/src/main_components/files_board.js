@@ -3,6 +3,7 @@ import Spinner from '../components/spinner'
 import TableView from '../components/table_view'
 import GridView from '../components/grid_view'
 import {AppContext} from '../utils/contexts'
+import './files_board.css'
 
 
 function FilesBoard({get_object_list, search_objects, download_object}){

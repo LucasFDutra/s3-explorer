@@ -1,5 +1,6 @@
 import { useContext, useRef } from 'react'
 import { AppContext } from '../utils/contexts'
+import './header.css'
 
 
 function Header({get_object_list}){
@@ -32,13 +33,23 @@ function Header({get_object_list}){
                 <button onClick={() => {handle_back_folder()}} className="btn btn-outline-secondary">
                     <i className="bi bi-chevron-left"></i>
                 </button>
-                <div className="mx-2 rounded" style={{height: '2.2em', width: '-webkit-fill-available', background: '#282c34ff'}}>
+                <div id="current-path" className="mx-2 rounded">
                     <h6 className="m-2 ms-3 text-white">{current_prefix.slice(0,current_prefix.length-1)}</h6>
                 </div>
-                <button ref={grid_view_button_ref} onClick={() => handle_view_change(true)} className="btn btn-outline-secondary text-white btn-files-view-selected" style={{borderRadius: "4px 0 0 4px"}}>
+                <button 
+                    ref={grid_view_button_ref} 
+                    id="btn-files-view-grid" 
+                    onClick={() => handle_view_change(true)} 
+                    className="btn btn-outline-secondary text-white btn-files-view-selected"
+                >
                     <i className="bi bi-grid-3x3-gap-fill"></i>
                 </button>
-                <button ref={table_view_button_ref} onClick={() => handle_view_change(false)} className="btn btn-outline-secondary btn-files-view text-white" style={{borderRadius: "0 4px 4px 0", borderLeft: 0}}>
+                <button 
+                    ref={table_view_button_ref} 
+                    id="btn-files-view-table" 
+                    onClick={() => handle_view_change(false)} 
+                    className="btn btn-outline-secondary btn-files-view text-white"
+                >
                     <i className="bi bi-list-task"></i>
                 </button>
             </div>

@@ -4,7 +4,7 @@ import {api} from '../utils/api'
 import Header from '../main_components/header'
 import BucketSelector from '../main_components/bucket_selector'
 import FilesBoard from '../main_components/files_board'
-import toast_control from '../utils/toast_control'
+import {show_toast} from '../components/toast'
 
 function Main() {
     const [buckets_list, set_buckets_list] = useState([])
@@ -41,7 +41,7 @@ function Main() {
             const response = await api.get('/get_buckets')
             set_buckets_list(response.data)
         } catch (error) {
-            toast_control(error.response.data)
+            show_toast(error.response.data, 'error')
         }
     }
 
@@ -96,7 +96,7 @@ function Main() {
                 set_files_board_search_content((currentList) => [...currentList, ...response.data.objects])
             } 
         } catch (error) {
-            toast_control(error.response.data)
+            show_toast(error.response.data, 'error')
         } finally {
             set_is_loading(false)
             set_is_loading_more(false)
@@ -153,7 +153,7 @@ function Main() {
                 set_files_board_content((currentList) => [...currentList, ...response.data.objects])
             }
         } catch (error) {
-            toast_control(error.response.data)
+            show_toast(error.response.data, 'error')
         } finally {
             set_is_loading(false)
             set_is_loading_more(false)
@@ -179,7 +179,7 @@ function Main() {
             const response = await api.get('/download_object', header)
             download_file(file_name, response.data)
         } catch (error) {
-            toast_control(error.response.data)
+            show_toast(error.response.data, 'error')
         }
     }
 
