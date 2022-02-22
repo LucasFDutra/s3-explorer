@@ -8,10 +8,10 @@ function TableView({content, end_of_page_id, download_object, get_object_list}){
             <thead>
                 <tr>
                     <th width="2em" className="text-white" scope="col"></th>
-                    <th width="30%" className="text-white table-content" scope="col">Nome</th>
-                    <th width="10%" className="text-white table-content" scope="col">Size</th>
-                    <th width="20%" className="text-white table-content" scope="col">Data De Modificação</th>
-                    <th width="40%" className="text-white table-content" scope="col">Key</th>
+                    <th width="30%" className="text-white files-board-content" scope="col">Nome</th>
+                    <th width="10%" className="text-white files-board-content" scope="col">Size</th>
+                    <th width="20%" className="text-white files-board-content" scope="col">Data De Modificação</th>
+                    <th width="40%" className="text-white files-board-content" scope="col">Key</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,7 +21,7 @@ function TableView({content, end_of_page_id, download_object, get_object_list}){
                         function(){
                             if(e.is_folder){
                                 return (
-                                    <FolderIcon folder_name={e.name} get_object_list={get_object_list} key={i} is_list_format={true}/>
+                                    <FolderIcon folder_name={e.name} get_object_list={get_object_list} key={i} is_table_format={true}/>
                                 )
                             } else{
                                 return (

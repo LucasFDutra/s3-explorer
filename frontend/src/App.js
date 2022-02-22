@@ -1,4 +1,4 @@
-import Toast from './components/toast'
+import {Toast} from './components/toast'
 import Main from './pages/main'
 import './App.css'
 

@@ -1,0 +1,18 @@
+.btn-files-view-selected {
+    background-color: #df4a16ff;
+}
+
+#current-path {
+    height: 2.2em;
+    width: -webkit-fill-available;
+    background: #282c34ff;
+}
+
+#btn-files-view-grid {
+    border-radius: 4px 0 0 4px;
+}
+
+#btn-files-view-table {
+    border-radius: 0 4px 4px 0;
+    border-left: 0;
+}

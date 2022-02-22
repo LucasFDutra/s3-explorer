@@ -1,7 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import FolderIcon from '../icons/folder.svg'
+import { AppContext } from '../utils/contexts'
 
-function Bucket({bucket_name, set_current_bucket, is_loading}){
+function Bucket({bucket_name}){
+    const {set_current_bucket, is_loading} = useContext(AppContext)
+
     useEffect(function(){
         Array.from(document.getElementsByClassName('bucket-title')).forEach(function(e){
             if (e.offsetWidth < e.scrollWidth){
