@@ -3,3 +3,5 @@ flask
 flask-cors
 pandas
 uwsgi
+
+python-dotenv
