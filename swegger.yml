@@ -1,0 +1,99 @@
+openapi: 3.0.0
+
+info:
+  title: Minha API de tarefas a fazer
+  version: 1.0.0
+  
+servers:
+  - url: http://lucas_xpto.com
+  
+components:
+  parameters:
+    ID:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  schemas:
+    Tarefa:
+      type: object
+      required:
+        - todo
+      properties:
+        todo:
+          type: string
+        status:
+          type: string
+    Tarefas:
+      type: object
+      properties:
+        tarefas: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Tarefa'
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+paths:
+  /tarefa:
+    post:
+      summary: Cria uma tarefa
+      description: Cria uma tarefa usando o payload xpto, yz. O status default é a fazer
+      parameters:
+        - name: Tarefa
+          in: body
+          required: True
+          schema:
+            $ref: '#/components/schemas/Tarefa'
+      responses:
+        201:
+          description: Deu certo, criado!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefa'
+              examples:
+                user:
+                  summary: User Exemple
+                  externalValue: 'https://foo.bar/exemples/user-exemple.json'
+        422:
+          description: Erro no Payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+    get:
+      summary: pega todas as tarefas
+      description: pega todas as tarefas da api
+      responses:
+        200:
+          description: deu certo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefas'
+              examples:
+                user:
+                  summary: User Exemple
+                  externalValue: 'https://foo.bar/exemples/user-exemple.json'
+          
+  /tarefa/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ID'
+    get:
+      summary: pega uma tarefas
+      description: pega uma tarefa por id
+      responses:
+        200:
+          description: Achou
+          
+        404:
+          description: Não achou
+                
+                
